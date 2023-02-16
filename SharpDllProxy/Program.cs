@@ -6,8 +6,7 @@ namespace SharpDllProxy
 {
     class Program
     {
-        public static string dllTemplate = @"
-// Auto Generated, do not commit this file!
+        public static string dllTemplate = @"// Auto Generated, do not commit this file!
 #include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,9 +78,10 @@ waiter(void)
             dllTemplate = dllTemplate.Replace("PRAGMA_COMMENTS", pragmaBuilder);
 
             Console.WriteLine($"[+] Exporting DLL C source");
-
-            File.WriteAllText(outPath + @"\" + "MocExports.cpp", dllTemplate);
-            File.WriteAllBytes(outPath + @"\" + tempName + ".dll", File.ReadAllBytes(orgDllPath));
+            string[] paths = { outPath, "MocExports.cpp" };
+            File.WriteAllText(Path.Combine(paths), dllTemplate);
+            paths = new string[] { outPath, tempName + ".dll" };
+            File.WriteAllBytes(Path.Combine(paths), File.ReadAllBytes(orgDllPath));
         }
     }
 }
